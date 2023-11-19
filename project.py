@@ -1,1 +1,1 @@
-##Первый проект
+print('Hello world')
