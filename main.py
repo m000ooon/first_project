@@ -17,11 +17,10 @@ def date_maker(st):  # Задание номер 1
         months_days[2] += 1
 
     if len(st) == 3:
-        if 1 <= st[0] <= months_days[st[1]] and 1 <= st[1] <= 12 and st[2] > 0:
-            st = f'{str(st[0])} {months[st[1]]} {str(st[2])} года'
+        if 1 <= st[1] <= 12 and 1 <= st[0] <= months_days[st[1]] and st[2] > 0:
+            st = f'{str(st[0])} {months[st[1]]} {str(st[2])} года\n'
             return st
-
-    return 'Введённый формат даты не существует.'
+    return 'Введённый формат даты не существует.\n'
 
 
 def name_diary(names):  # Задание номер 2
