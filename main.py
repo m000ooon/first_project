@@ -1,5 +1,6 @@
 def date_maker(st):  # Задание номер 1
-    months = ['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+    months = ['', 'января', 'февраля', 'марта',
+              'апреля', 'мая', 'июня', 'июля',
               'августа', 'сентября', 'октября', 'ноября', 'декабря']
     months_days = ['', 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
@@ -34,7 +35,8 @@ def name_diary(names):  # Задание номер 2
 def full_name(name):  # Задание номер 3
     b = [x for x in name.keys()]
     if len(b) == 3:
-        return f"{name['last_name']} {name['first_name']} {name['middle_name']}"
+        return (f"{name['last_name']} "
+                f"{name['first_name']} {name['middle_name']}")
     elif len(b) == 2:
         if not ('last_name' in b):
             return f"{name['first_name']} {name['middle_name']}"
@@ -46,3 +48,14 @@ def full_name(name):  # Задание номер 3
         if 'middle_name' not in b:
             print(name[b[0]])
     return 'Нет данных'
+
+
+def is_prime(numb):  # Задание номер 4
+    if numb <= 0 or numb == 1:
+        return False
+    return all(numb % x != 0 for x in range(2, int(numb**1/2)+1))
+
+
+def unique_numbs(*args):  # Задание номер 5
+    arr = set(args)
+    return sorted([x for x in arr if isinstance(x, int)])
