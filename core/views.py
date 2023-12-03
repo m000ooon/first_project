@@ -5,8 +5,8 @@ from django.views import View
 class Homepage(View):
     def get(self, request):
         context = {
-            'text': 'Приветствую вас!',
-            'title': 'Добрый сайт',
+            'text': 'Добро пожаловать на сайт Компьютер.ру',
+            'title': 'Компьютер.ру',
         }
         return render(request=request, template_name='core/mainpage.html', context=context)
 
