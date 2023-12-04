@@ -49,3 +49,32 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Customer(models.Model):
+    first_name = models.CharField('Имя', max_length=30)
+    middle_name = models.CharField('Отчество', max_length=30, blank=True)
+    last_name = models.CharField('Фамилия', max_length=30, blank=True)
+    reg_date = models.DateTimeField('Зарегистрирован', auto_now_add=True)
+    description = models.CharField('О себе', max_length=255)
+    contact = models.CharField('Контакт', max_length=30)
+
+
+class Advertisment(models.Model):
+    owner = models.ForeignKey(Customer, verbose_name='Автор', related_name='ads', on_delete=models.CASCADE)
+    title = models.CharField('Название', max_length=50)
+    description = models.CharField('Описание', max_length=500, null=True)
+    price = models.CharField('Цена', max_length=10)
+    is_active = models.BooleanField('Активно', default=False)
+    rang = models.CharField('Ранг', max_length=1, default=1)
+
+
+class Moderator(Customer):
+    is_active = models.BooleanField('Активен', default=True)
+    rang = models.CharField('Ранг', max_length=1, default=2)
+
+
+class Message(models.Model):
+    author = models.ForeignKey(Customer, verbose_name='Отправитель', related_name='messages', on_delete=models.CASCADE)
+    addressee = models.ManyToManyField(Customer, verbose_name='Адресат', related_name='messages', on_delete=models.CASCADE)
+    text = models.CharField('Текст', max_length=255, null=True, on_delete=models.CASCADE)
