@@ -5,13 +5,13 @@ from django.db import models
 User = get_user_model()
 
 
-class Student(models.Model):
-    first_name = models.CharField('Имя', max_length=50, blank=True)
-    last_name = models.CharField('Фамилия', max_length=50, blank=True)
-    middle_name = models.CharField('Отчество', max_length=50, blank=True)
-    contact = models.CharField('Контакты', max_length=255, blank=True)
-    is_active = models.BooleanField('Активен', default=True)
-    dc = models.DateTimeField('Создан', auto_now_add=True,)
+class Customer(models.Model):
+    first_name = models.CharField('Имя', max_length=30)
+    middle_name = models.CharField('Отчество', max_length=30, blank=True)
+    last_name = models.CharField('Фамилия', max_length=30, blank=True)
+    reg_date = models.DateTimeField('Зарегистрирован', auto_now_add=True)
+    description = models.TextField('О себе', max_length=255, blank=True)
+    contact = models.CharField('Контакт', max_length=30)
 
     def __str__(self):
         return self.get_full_name_str()
@@ -29,23 +29,26 @@ class Student(models.Model):
             return 'Нет данных'
 
 
-class Project(models.Model):
-    student = models.ForeignKey(Student, verbose_name='Студент', on_delete=models.PROTECT, related_name='projects')
-    url = models.URLField('URL')
-    dc = models.DateTimeField('Создан', auto_now_add=True)
-
-    def __str__(self):
-        return f'Проект студента {str(self.student)}'
-
-
-class Task(models.Model):
-    students = models.ManyToManyField(Student, verbose_name='студент', related_name='tasks')
-    projects = models.ManyToManyField(Project, verbose_name='проекты', related_name='tasks')
-    title = models.CharField('Название', max_length=255)
-    description = models.TextField('Описание', blank=True)
-    creator = models.ForeignKey(User, verbose_name='Создатель задачи', related_name='tasks', on_delete=models.SET_NULL, null=True,)
-    deadline = models.DateField('Дедлайн', null=True)
+class Advertisment(models.Model):
+    owner = models.ForeignKey(Customer, verbose_name='Автор', related_name='ads', on_delete=models.CASCADE)
+    title = models.CharField('Название', max_length=50)
+    description = models.TextField('Описание', max_length=500, blank=True)
+    price = models.DecimalField('Цена', max_length=10)
+    is_active = models.BooleanField('Активно', default=False)
+    rang = models.IntegerField('Ранг', max_length=1, default=1)
     dc = models.DateTimeField('Создан', auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class Moderator(Customer):
+    is_active = models.BooleanField('Активен', default=True)
+    rang = models.IntegerField('Ранг', max_length=1, default=1)
+
+
+class Message(models.Model):
+    author = models.ForeignKey(Customer, verbose_name='Отправитель', related_name='messages', on_delete=models.CASCADE)
+    addressee = models.ManyToManyField(Customer, verbose_name='Адресат', related_name='messages', on_delete=models.CASCADE)
+    text = models.TextField('Текст', max_length=300, null=True, on_delete=models.CASCADE)
+    dc = models.DateTimeField('Время отправки', auto_now_add=True)
